@@ -1,16 +1,17 @@
-## Avr-Timers
+Avr-Timers
+==============================================================================================
 
 Arduino/Avr compatible libraries to control timers 0, 1 and 2.
 
 ### Description
 
 Those libraries work by setting up the timer and executing a user-defined function after
-that time, repeating indifenitely.
+that time, repeating indefinitely.
 
-When the "top" value is reached by the timer, an interrupt will happen. In this interrupt,
+- When the "top" value is reached by the timer, an interrupt will happen. In this interrupt,
 the number of loops will increase till "loops" are reached.
 
-When "loops" are reached, the user defined "f" function is called.
+- When "loops" are reached, the user defined "f" function is called.
 
 The functions look all the same:
 
@@ -37,9 +38,13 @@ Let's run a function every 50 milliseconds using timer0 in arduino (16Mhz atmega
 	
 		TIMER0_PRESCALER_64
 		
-2. Divide cpu frequency by prescaler: 16000000 / 64 = 250000 Hz
+2. Divide cpu frequency by prescaler
+		
+		16000000 / 64 = 250000 Hz
 
-3. Get the period of the timer: 1 / 250000 = 4 us
+3. Get the period of the timer
+
+		1 / 250000 = 4 us
 	
 4. Every 4us, timer0 will increase by 1. Now let's divide 50ms by 4us:
 	
