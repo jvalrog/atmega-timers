@@ -14,9 +14,9 @@ When "loops" are reached, the user defined "f" function is called.
 
 The functions look all the same:
 
-	void timer0(uint8_t prescaler, uint8_t top, uint16_t loops, void (*f)())
-	void timer1(uint8_t prescaler, uint16_t top, uint16_t loops, void (*f)())
-	void timer2(uint8_t prescaler, uint8_t top, uint16_t loops, void (*f)())
+		void timer0(uint8_t prescaler, uint8_t top, uint16_t loops, void (*f)())
+		void timer1(uint8_t prescaler, uint16_t top, uint16_t loops, void (*f)())
+		void timer2(uint8_t prescaler, uint8_t top, uint16_t loops, void (*f)())
 
 Prescaler constants are defined in each header file for easy access.
 
