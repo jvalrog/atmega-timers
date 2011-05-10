@@ -7,10 +7,10 @@ Arduino/Avr compatible libraries to control timers 0, 1 and 2.
 Those libraries work by setting up the timer and executing a user-defined function after
 that time, repeating indefinitely.
 
-- When the "top" value is reached by the timer, an interrupt will happen. In this interrupt,
-the number of loops will increase till "loops" are reached.
+- When the `top` value is reached by the timer, an interrupt will happen. In this interrupt,
+the number of loops will increase till `loops` are reached.
 
-- When "loops" are reached, the user defined "f" function is called.
+- When `loops` are reached, the user defined `f` function is called.
 
 The functions look all the same:
 
@@ -18,12 +18,16 @@ The functions look all the same:
 	void timer1(uint8_t prescaler, uint16_t top, uint16_t loops, void (*f)())
 	void timer2(uint8_t prescaler, uint8_t top, uint16_t loops, void (*f)())
 
-Prescaler constants are defined in each header file for easy access.
+Prescaler constants are defined in each header file for easy access. For example:
 
+	TIMER0_PRESCALER_8
+	TIMER0_PRESCALER_64
+	...
+	
 There is only a difference between timer1 and both timer0 and timer2. It's the resolution.
 Timer1 use 16bit registers while timer0 and timer2 are 8bit.
 
-The funcion "f" is something like this:
+The funcion `f` is something like this:
 
 	void myfunction() {
 		...
@@ -49,7 +53,7 @@ Let's run a function every 50 milliseconds using timer0 in arduino (16Mhz atmega
 	
 		50000us / 4us = 12500 ticks
 	
-5. As 12500 *timer ticks* are too long for our 8 bit register, let's divide it by 50:
+5. As 12500 `timer ticks` are too long for our 8 bit register, let's divide it by 50:
 	
 		12500 / 50 = 250
 		
@@ -76,8 +80,8 @@ will be 50.
 		}
 	}
 
-	// REMEMBER TO ACTIVATE GLOBAL INTERRUPTS WITH *sei()*
+	// REMEMBER TO ACTIVATE GLOBAL INTERRUPTS WITH sei()
 
 ## Running it in Arduino
 
-Just rename those ".c" files to ".cpp" and install it as other libraries.
+Just rename those `.c` files to `.cpp` and install it as other libraries.
