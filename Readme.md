@@ -35,7 +35,6 @@ The funcion "f" is something like this:
 Let's run a function every 50 milliseconds using timer0 in arduino (16Mhz atmega168/328):
 
 1. Set a prescaler value that will allow timer to count up to 50 milliseconds
-	
 	TIMER0_PRESCALER_64
 		
 2. Divide cpu frequency by prescaler
