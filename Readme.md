@@ -43,34 +43,34 @@ Let's run a function every 50 milliseconds using timer0 in arduino (16Mhz atmega
 	
 4. Every 4us, timer0 will increase by 1. Now let's divide 50ms by 4us:
 	
-	50000us / 4us = 12500 ticks
+		50000us / 4us = 12500 ticks
 	
 5. As 12500 *timer ticks* are too long for our 8 bit register, let's divide it by 50:
 	
-	12500 / 50 = 250
+		12500 / 50 = 250
 		
 6. 250 ticks are a valid number to store in an 8 bit register, so our number of loops
 will be 50.
 	
 7. You are done.
 	
-	50 loops * 250 ticks * 4us = 50ms
+		50 loops * 250 ticks * 4us = 50ms
 
 ### Sample Code
 	
-	#include "timer0.h"
-	
-	void myfunction() {
-		// do something
-	}
-	
-	void main() {
-		timer0(TIMER0_PRESCALER_64, 250, 50, myfunction);
-		sei();
-		while(1) {
-			// main loop
+		#include "timer0.h"
+		
+		void myfunction() {
+			// do something
 		}
-	}
+		
+		void main() {
+			timer0(TIMER0_PRESCALER_64, 250, 50, myfunction);
+			sei();
+			while(1) {
+				// main loop
+			}
+		}
 
-	// REMEMBER TO ACTIVATE GLOBAL INTERRUPTS WITH *sei()*
+		// REMEMBER TO ACTIVATE GLOBAL INTERRUPTS WITH *sei()*
 
