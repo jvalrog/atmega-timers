@@ -35,30 +35,31 @@ The funcion "f" is something like this:
 Let's run a function every 50 milliseconds using timer0 in arduino (16Mhz atmega168/328):
 
 1. Set a prescaler value that will allow timer to count up to 50 milliseconds
-	TIMER0_PRESCALER_64
+	
+		TIMER0_PRESCALER_64
 		
 2. Divide cpu frequency by prescaler
 		
-	16000000 / 64 = 250000 Hz
+		16000000 / 64 = 250000 Hz
 
 3. Get the period of the timer
 
-	1 / 250000 = 4 us
+		1 / 250000 = 4 us
 	
 4. Every 4us, timer0 will increase by 1. Now let's divide 50ms by 4us:
 	
-	50000us / 4us = 12500 ticks
+		50000us / 4us = 12500 ticks
 	
 5. As 12500 *timer ticks* are too long for our 8 bit register, let's divide it by 50:
 	
-	12500 / 50 = 250
+		12500 / 50 = 250
 		
 6. 250 ticks are a valid number to store in an 8 bit register, so our number of loops
 will be 50.
 	
 7. You are done.
 	
-	50 loops * 250 ticks * 4us = 50ms
+		50 loops * 250 ticks * 4us = 50ms
 
 ### Sample Code
 	
