@@ -1,9 +1,8 @@
-Avr-Timers
-==============================================================================================
+# Avr-Timers
 
 Arduino/Avr compatible libraries to control timers 0, 1 and 2.
 
-### Description
+## Description
 
 Those libraries work by setting up the timer and executing a user-defined function after
 that time, repeating indefinitely.
@@ -30,7 +29,7 @@ The funcion "f" is something like this:
 		...
 	}
 	
-### Usage
+## Usage
 
 Let's run a function every 50 milliseconds using timer0 in arduino (16Mhz atmega168/328):
 
@@ -61,7 +60,7 @@ will be 50.
 	
 		50 loops * 250 ticks * 4us = 50ms
 
-### Sample Code
+## Sample Code
 	
 	#include "timer0.h"
 		
@@ -79,3 +78,6 @@ will be 50.
 
 	// REMEMBER TO ACTIVATE GLOBAL INTERRUPTS WITH *sei()*
 
+## Running it in Arduino
+
+Just rename those ".c" files to ".cpp" and install it as other libraries.
