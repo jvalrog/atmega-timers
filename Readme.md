@@ -1,10 +1,10 @@
-# Avr-Timers
+# atmega-timers
 
-Arduino/Avr compatible libraries to control timers 0, 1 and 2.
+`atmega-timers` is an Arduino/Avr compatible library to control timers 0, 1 and 2.
 
 ## Description
 
-Those libraries work by setting up the timer and executing a user-defined function after
+This library works by setting up the timers and executing a user-defined function after
 that time, repeating indefinitely.
 
 - When the `top` value is reached by the timer, an interrupt will happen. In this interrupt,
@@ -18,14 +18,13 @@ The functions look all the same:
 	void timer1(uint8_t prescaler, uint16_t top, uint16_t loops, void (*f)())
 	void timer2(uint8_t prescaler, uint8_t top, uint16_t loops, void (*f)())
 
-Prescaler constants are defined in each header file for easy access. For example:
+Prescaler constants are defined for easy access. For example:
 
 	TIMER0_PRESCALER_8
 	TIMER0_PRESCALER_64
 	...
 	
-There is only a difference between timer1 and both timer0 and timer2. It's the resolution.
-Timer1 use 16bit registers while timer0 and timer2 are 8bit.
+Timer1 is always 16bit long. This means that you can set higher periods than timer0 or timer2.
 
 The funcion `f` is something like this:
 
@@ -66,8 +65,8 @@ will be 50.
 
 ## Sample Code
 	
-	#include "timer0.h"
-		
+	#include "atmega-timers.h"
+	
 	void myfunction() {
 		// do something
 	}
@@ -84,4 +83,4 @@ will be 50.
 
 ## Running it in Arduino
 
-Just rename those `.c` files to `.cpp` and install it as other libraries.
+Just rename the `.c` file to `.cpp` and install it as other libraries.

@@ -1,4 +1,4 @@
-//      timer0.c
+//      atmega-timers.c
 //      
 //      Copyright 2011 Javier Valencia <javiervalencia80@gmail.com>
 //      
@@ -19,11 +19,19 @@
 //      
 //      
 
-#include "timer0.h"
+#include "atmega-timers.h"
 
 void (*_t0_func)();
 volatile uint16_t _t0_loops;
 volatile uint16_t _t0_iter;
+
+void (*_t1_func)();
+volatile uint16_t _t1_loops;
+volatile uint16_t _t1_iter;
+
+void (*_t2_func)();
+volatile uint16_t _t2_loops;
+volatile uint16_t _t2_iter;
 
 void timer0(uint8_t prescaler, uint8_t top, uint16_t loops, void (*f)()) {
 	TIMSK0 = 0;
@@ -44,5 +52,50 @@ ISR(TIMER0_COMPA_vect) {
 	if (_t0_iter == _t0_loops) {
 		_t0_iter = 0;
 		_t0_func();
+	}
+}
+
+void timer1(uint8_t prescaler, uint16_t top, uint16_t loops, void (*f)()) {
+	TIMSK1 = 0;
+	OCR1A = top;
+	TCCR1A = 0; // CTC mode
+	TCCR1B = prescaler | (1<<WGM12);
+	TCNT1 = 0;
+	if (f) {
+		_t1_func = f;
+		_t1_loops = loops;
+		_t1_iter = 0;
+		TIMSK1 = 2; // enable
+	}
+}
+
+ISR(TIMER1_COMPA_vect) {
+	_t1_iter++;
+	if (_t1_iter == _t1_loops) {
+		_t1_iter = 0;
+		_t1_func();
+	}
+}
+
+void timer2(uint8_t prescaler, uint8_t top, uint16_t loops, void (*f)()) {
+	TIMSK2 = 0;
+	OCR2A = top;
+	ASSR = 0;
+	TCCR2A = 2; // CTC mode
+	TCCR2B = prescaler;
+	TCNT2 = 0;
+	if (f) {
+		_t2_func = f;
+		_t2_loops = loops;
+		_t2_iter = 0;
+		TIMSK2 = 2; // enable
+	}
+}
+
+ISR(TIMER2_COMPA_vect) {
+	_t2_iter++;
+	if (_t2_iter == _t2_loops) {
+		_t2_iter = 0;
+		_t2_func();
 	}
 }
