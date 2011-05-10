@@ -25,9 +25,9 @@ Timer1 use 16bit registers while timer0 and timer2 are 8bit.
 
 The funcion "f" is something like this:
 
-	void myfunction() {
-		...
-	}
+		void myfunction() {
+			...
+		}
 	
 ### Usage
 
@@ -35,7 +35,7 @@ Let's run a function every 50 milliseconds using timer0 in arduino (16Mhz atmega
 
 1. Set a prescaler value that will allow timer to count up to 50 milliseconds
 	
-	TIMER0_PRESCALER_64
+		TIMER0_PRESCALER_64
 		
 2. Divide cpu frequency by prescaler: 16000000 / 64 = 250000 Hz
 
