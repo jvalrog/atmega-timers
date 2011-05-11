@@ -7,80 +7,74 @@
 This library works by setting up the timers and executing a user-defined function after
 that time, repeating indefinitely.
 
-- When the `top` value is reached by the timer, an interrupt will happen. In this interrupt,
-the number of loops will increase till `loops` are reached.
+The functions are:
+	void timer0(uint8_t prescaler, uint32_t ticks, void (*f)())
+	void timer1(uint8_t prescaler, uint32_t ticks, void (*f)())
+	void timer2(uint8_t prescaler, uint32_t ticks, void (*f)())
 
-- When `loops` are reached, the user defined `f` function is called.
-
-The functions look all the same:
-
-	void timer0(uint8_t prescaler, uint8_t top, uint16_t loops, void (*f)())
-	void timer1(uint8_t prescaler, uint16_t top, uint16_t loops, void (*f)())
-	void timer2(uint8_t prescaler, uint8_t top, uint16_t loops, void (*f)())
-
-Prescaler constants are defined for easy access. For example:
-
+- `prescaler` are predefined constants in the header file. For example:
 	TIMER0_PRESCALER_8
 	TIMER0_PRESCALER_64
 	...
+
+- `ticks` are the number of steps the timer will count. Current limits are:
+	* timer0 -> 0..16777215
+	* timer1 -> 0..4294967295
+	* timer2 -> 0..16777215
 	
-Timer1 is always 16bit long. This means that you can set higher periods than timer0 or timer2.
-
-The funcion `f` is something like this:
-
-	void myfunction() {
+- `f` is the function to execute after all ticks are consumed. Must be declared `void`
+with no parameters:
+	void sample() {
 		...
 	}
 	
 ## Usage
 
-Let's run a function every 50 milliseconds using timer0 in arduino (16Mhz atmega168/328):
+You need to know your CPU clock frequency before setting the timers.
 
-1. Set a prescaler value that will allow timer to count up to 50 milliseconds
-	
-		TIMER0_PRESCALER_64
-		
-2. Divide cpu frequency by prescaler
-		
-		16000000 / 64 = 250000 Hz
+1. Divide CPU clock by selected prescaler:
+	16000000 / 64 = 250000 Hz
 
-3. Get the period of the timer
+2. Get timer period:
+	1 / 250000 = 4 us
+	
+3. Divide your desired period by timer period, for example 20 milliseconds:
+	20000 us / 4 us = 5000 ticks
 
-		1 / 250000 = 4 us
-	
-4. Every 4us, timer0 will increase by 1. Now let's divide 50ms by 4us:
-	
-		50000us / 4us = 12500 ticks
-	
-5. As 12500 `timer ticks` are too long for our 8 bit register, let's divide it by 50:
-	
-		12500 / 50 = 250
-		
-6. 250 ticks are a valid number to store in an 8 bit register, so our number of loops
-will be 50.
-	
-7. You are done.
-	
-		50 loops * 250 ticks * 4us = 50ms
+4. Call the function:
+	timer0(TIMER0_PRESCALER_64, 5000, toggle_bits);
 
+5. Enable global interrupts:
+	sei();
+	
 ## Sample Code
-	
+
+	#include <avr/io.h>
 	#include "atmega-timers.h"
-	
-	void myfunction() {
-		// do something
+
+	// toggle PORTB status
+	void toggle() {
+		static uint8_t output = 0xff;
+
+		PORTB = output;
+		output = !output;
 	}
-		
+
 	void main() {
-		timer0(TIMER0_PRESCALER_64, 250, 50, myfunction);
+		// set all pins of PORTB as output
+		DDRB = 0xff;
+		
+		// toggle PORTB each 500ms (using 16Mhz clock)
+		timer0(TIMER0_PRESCALER_64, 125000, toggle);
+		
+		// enable global interrupts
 		sei();
+
 		while(1) {
-			// main loop
+			// do nothing
 		}
 	}
 
-	// REMEMBER TO ACTIVATE GLOBAL INTERRUPTS WITH sei()
-
 ## Running it in Arduino
 
-Just rename the `.c` file to `.cpp` and install it as other libraries.
+Just rename the `.c` file to `.cpp` and install it as a normal library.
