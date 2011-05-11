@@ -87,3 +87,13 @@ You need to know your CPU clock frequency before setting the timers.
 ## Running it in Arduino
 
 Just rename `atmega-timers.c` to `atmega-timers.cpp` and install it as a normal library.
+
+## Atmel Model Support
+
+It should work with a long range of devices, for example:
+
+- atmega48, 88, 168, 328
+- atmega164, 324, 644, 1284
+- atmega640, 1280, 1281, 2560, 2561
+- atmega325, 645
+- ...
