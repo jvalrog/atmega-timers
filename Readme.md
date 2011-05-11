@@ -13,24 +13,24 @@ The functions are:
 	void timer1(uint8_t prescaler, uint32_t ticks, void (*f)())
 	void timer2(uint8_t prescaler, uint32_t ticks, void (*f)())
 
-- `prescaler` are predefined constants in the header file. For example:
+	- `prescaler` are predefined constants in the header file. For example:
 	
-	TIMER0_PRESCALER_8
-	TIMER0_PRESCALER_64
-	...
-
-- `ticks` are the number of steps the timer will count. Current limits are:
-	
-	timer0: 0..16777215
-	timer1: 0..4294967295
-	timer2: 0..16777215
-	
-- `f` is the function to execute after all ticks are consumed. Must be declared `void`
-with no parameters:
-	
-	void sample() {
+		TIMER0_PRESCALER_8
+		TIMER0_PRESCALER_64
 		...
-	}
+
+	- `ticks` are the number of steps the timer will count. Current limits are:
+	
+		timer0: 0..16777215
+		timer1: 0..4294967295
+		timer2: 0..16777215
+	
+	- `f` is the function to execute after all ticks are consumed. Must be declared `void`
+	with no parameters:
+	
+		void sample() {
+			...
+		}
 	
 ## Usage
 
