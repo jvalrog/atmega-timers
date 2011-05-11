@@ -9,9 +9,9 @@ that time, repeating indefinitely.
 
 The functions are:
 
-`void timer0(uint8_t prescaler, uint32_t ticks, void (*f)())`
-`void timer1(uint8_t prescaler, uint32_t ticks, void (*f)())`
-`void timer2(uint8_t prescaler, uint32_t ticks, void (*f)())`
+void timer0(uint8_t prescaler, uint32_t ticks, void (*f)())
+void timer1(uint8_t prescaler, uint32_t ticks, void (*f)())
+void timer2(uint8_t prescaler, uint32_t ticks, void (*f)())
 
 - `prescaler` are predefined constants in the header file. For example:
 
