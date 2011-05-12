@@ -50,7 +50,7 @@ You need to know your CPU clock frequency before setting the timers.
 
 4. Call the function:
 	
-		timer0(TIMER0_PRESCALER_64, 5000, toggle_bits);
+		timer0(TIMER0_PRESCALER_64, 5000UL, toggle_bits);
 
 5. Enable global interrupts:
 	
@@ -74,7 +74,7 @@ You need to know your CPU clock frequency before setting the timers.
 		DDRB = 0xff;
 		
 		// toggle PORTB each 500ms (using 16Mhz clock)
-		timer0(TIMER0_PRESCALER_64, 125000, toggle);
+		timer0(TIMER0_PRESCALER_64, 125000UL, toggle);
 		
 		// enable global interrupts
 		sei();

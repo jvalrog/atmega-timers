@@ -14,7 +14,7 @@ void main() {
 	DDRB = 0xff;
 	
 	// toggle PORTB each 500ms (using 16Mhz clock)
-	timer0(TIMER0_PRESCALER_64, 125000, toggle);
+	timer0(TIMER0_PRESCALER_64, 125000UL, toggle);
 	
 	// enable global interrupts
 	sei();

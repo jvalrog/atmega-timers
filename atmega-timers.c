@@ -39,10 +39,10 @@ volatile uint8_t _t2_offset;
 void timer0(uint8_t prescaler, uint32_t ticks, void (*f)()) {
 	TIMSK0 = 0;
 	_t0_func = f;
-	_t0_loops = ticks / 256;
+	_t0_loops = ticks / 256U;
 	_t0_iter = 0;
-	_t0_offset = ticks - (_t0_loops * 256);
-	if (ticks >= 256)
+	_t0_offset = ticks - (_t0_loops * 256U);
+	if (ticks >= 256U)
 		OCR0A = 255;
 	else
 		OCR0A = ticks;
@@ -72,11 +72,11 @@ ISR(TIMER0_COMPA_vect) {
 void timer1(uint8_t prescaler, uint32_t ticks, void (*f)()) {
 	TIMSK1 = 0;
 	_t1_func = f;
-	_t1_loops = ticks / 65536;
+	_t1_loops = ticks / 65536UL;
 	_t1_iter = 0;
-	_t1_offset = ticks - (_t1_loops * 65536);
-	if (ticks >= 65536)
-		OCR1A = 65535;
+	_t1_offset = ticks - (_t1_loops * 65536UL);
+	if (ticks >= 65536UL)
+		OCR1A = 65535U;
 	else
 		OCR1A = ticks;
 	TCCR1A = 0;
@@ -90,7 +90,7 @@ ISR(TIMER1_COMPA_vect) {
 	_t1_iter++;
 	if (_t1_iter == _t1_loops) {
 		if (_t1_offset > 0) {
-			TCNT1 = 65535 - _t1_offset;
+			TCNT1 = 65535U - _t1_offset;
 		} else {
 			_t1_iter = 0;
 			_t1_func();
@@ -105,10 +105,10 @@ ISR(TIMER1_COMPA_vect) {
 void timer2(uint8_t prescaler, uint32_t ticks, void (*f)()) {
 	TIMSK2 = 0;
 	_t2_func = f;
-	_t2_loops = ticks / 256;
+	_t2_loops = ticks / 256U;
 	_t2_iter = 0;
-	_t2_offset = ticks - (_t2_loops * 256);
-	if (ticks >= 256)
+	_t2_offset = ticks - (_t2_loops * 256U);
+	if (ticks >= 256U)
 		OCR2A = 255;
 	else
 		OCR2A = ticks;
