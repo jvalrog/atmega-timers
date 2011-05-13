@@ -20,9 +20,9 @@ This library contains several functions to use the timers in different ways.
 
 	- `ticks` are the number of steps the timer will count. Current limits are:
 
-		timer0: 0 - 255
-		timer1: 0 - 65535
-		timer2: 0 - 255
+			timer0: 0 - 255
+			timer1: 0 - 65535
+			timer2: 0 - 255
 	
 	- `f` is the function to execute after all ticks are consumed. Must be declared `void`
 	with no parameters:
@@ -46,9 +46,9 @@ the count is done.
 
 	- `ticks` are the number of steps the timer will count. Current limits are:
 
-		timer0: 0 - 255
-		timer1: 0 - 65535
-		timer2: 0 - 255
+			timer0: 0 - 255
+			timer1: 0 - 65535
+			timer2: 0 - 255
 
 ## Usage
 
@@ -93,7 +93,7 @@ You need to know your CPU clock frequency before setting the timers.
 			// set all pins of PORTB as output
 			DDRB = 0xff;
 			
-			// toggle PORTB every 500ms
+			// toggle PORTB every 500ms (using 16Mhz clock)
 			while(1) {
 				toggle();
 				wait1(TIMER1_PRESCALER_1024, 7812U);
