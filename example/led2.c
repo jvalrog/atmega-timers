@@ -13,13 +13,9 @@ void main() {
 	// set all pins of PORTB as output
 	DDRB = 0xff;
 	
-	// toggle PORTB every 500ms (using 16Mhz clock)
-	timer1(TIMER1_PRESCALER_1024, 7812U, toggle);
-	
-	// enable global interrupts
-	sei();
-
+	// toggle PORTB every 500ms
 	while(1) {
-		// do nothing
+		toggle();
+		wait1(TIMER1_PRESCALER_1024, 7812U);
 	}
 }

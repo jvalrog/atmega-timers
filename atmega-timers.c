@@ -22,30 +22,13 @@
 #include "atmega-timers.h"
 
 void (*_t0_func)();
-volatile uint32_t _t0_loops;
-volatile uint32_t _t0_iter;
-volatile uint8_t _t0_offset;
-
 void (*_t1_func)();
-volatile uint32_t _t1_loops;
-volatile uint32_t _t1_iter;
-volatile uint16_t _t1_offset;
-
 void (*_t2_func)();
-volatile uint32_t _t2_loops;
-volatile uint32_t _t2_iter;
-volatile uint8_t _t2_offset;
 
-void timer0(uint8_t prescaler, uint32_t ticks, void (*f)()) {
+void timer0(uint8_t prescaler, uint8_t ticks, void (*f)()) {
 	TIMSK0 = 0;
 	_t0_func = f;
-	_t0_loops = ticks / 256U;
-	_t0_iter = 0;
-	_t0_offset = ticks - (_t0_loops * 256U);
-	if (ticks >= 256U)
-		OCR0A = 255;
-	else
-		OCR0A = ticks;
+	OCR0A = ticks;
 	TCCR0A = 2;
 	TCCR0B = prescaler;
 	TCNT0 = 0;
@@ -54,31 +37,14 @@ void timer0(uint8_t prescaler, uint32_t ticks, void (*f)()) {
 
 ISR(TIMER0_COMPA_vect) {
 	TIMSK0 = 0;
-	_t0_iter++;
-	if (_t0_iter == _t0_loops) {
-		if (_t0_offset > 0) {
-			TCNT0 = 255 - _t0_offset;
-		} else {
-			_t0_iter = 0;
-			_t0_func();
-		}
-	} else if (_t0_iter > _t0_loops) {
-		_t0_iter = 0;
-		_t0_func();
-	}
+	_t0_func();
 	TIMSK0 = 2;
 }
 
-void timer1(uint8_t prescaler, uint32_t ticks, void (*f)()) {
+void timer1(uint8_t prescaler, uint16_t ticks, void (*f)()) {
 	TIMSK1 = 0;
 	_t1_func = f;
-	_t1_loops = ticks / 65536UL;
-	_t1_iter = 0;
-	_t1_offset = ticks - (_t1_loops * 65536UL);
-	if (ticks >= 65536UL)
-		OCR1A = 65535U;
-	else
-		OCR1A = ticks;
+	OCR1A = ticks;
 	TCCR1A = 0;
 	TCCR1B = prescaler | (1<<WGM12);
 	TCNT1 = 0;
@@ -87,31 +53,14 @@ void timer1(uint8_t prescaler, uint32_t ticks, void (*f)()) {
 
 ISR(TIMER1_COMPA_vect) {
 	TIMSK1 = 0;
-	_t1_iter++;
-	if (_t1_iter == _t1_loops) {
-		if (_t1_offset > 0) {
-			TCNT1 = 65535U - _t1_offset;
-		} else {
-			_t1_iter = 0;
-			_t1_func();
-		}
-	} else if (_t1_iter > _t1_loops) {
-		_t1_iter = 0;
-		_t1_func();
-	}
+	_t1_func();
 	TIMSK1 = 2;
 }
 
-void timer2(uint8_t prescaler, uint32_t ticks, void (*f)()) {
+void timer2(uint8_t prescaler, uint8_t ticks, void (*f)()) {
 	TIMSK2 = 0;
 	_t2_func = f;
-	_t2_loops = ticks / 256U;
-	_t2_iter = 0;
-	_t2_offset = ticks - (_t2_loops * 256U);
-	if (ticks >= 256U)
-		OCR2A = 255;
-	else
-		OCR2A = ticks;
+	OCR2A = ticks;
 	ASSR = 0;
 	TCCR2A = 2;
 	TCCR2B = prescaler;
@@ -121,17 +70,37 @@ void timer2(uint8_t prescaler, uint32_t ticks, void (*f)()) {
 
 ISR(TIMER2_COMPA_vect) {
 	TIMSK2 = 0;
-	_t2_iter++;
-	if (_t2_iter == _t2_loops) {
-		if (_t2_offset > 0) {
-			TCNT2 = 255 - _t2_offset;
-		} else {
-			_t2_iter = 0;
-			_t2_func();
-		}
-	} else if (_t2_iter > _t2_loops) {
-		_t2_iter = 0;
-		_t2_func();
-	}
+	_t2_func();
 	TIMSK2 = 2;
+}
+
+void wait0(uint8_t prescaler, uint8_t ticks) {
+	TIMSK0 = 0;
+	OCR0A = ticks;
+	TCCR0A = 2;
+	TCCR0B = prescaler;
+	TCNT0 = 0;
+	TIFR0 = 2;
+	while(!(TIFR0 & 2));
+}
+
+void wait1(uint8_t prescaler, uint16_t ticks) {
+	TIMSK1 = 0;
+	OCR1A = ticks;
+	TCCR1A = 0;
+	TCCR1B = prescaler | (1<<WGM12);
+	TCNT1 = 0;
+	TIFR1 = 2;
+	while(!(TIFR1 & 2));
+}
+
+void wait2(uint8_t prescaler, uint8_t ticks) {
+	TIMSK2 = 0;
+	ASSR = 0;
+	OCR2A = ticks;
+	TCCR2A = 2;
+	TCCR2B = prescaler;
+	TCNT2 = 0;
+	TIFR2 = 2;
+	while(!(TIFR2 & 2));
 }

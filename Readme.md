@@ -4,34 +4,52 @@
 
 ## Description
 
-This library works by setting up the timers and executing a user-defined function after
-that time, repeating indefinitely.
+This library contains several functions to use the timers in different ways.
 
-The functions are:
+- One way is using the timers to execute a function on a defined period, indefinitely.
 
-	void timer0(uint8_t prescaler, uint32_t ticks, void (*f)())
-	void timer1(uint8_t prescaler, uint32_t ticks, void (*f)())
-	void timer2(uint8_t prescaler, uint32_t ticks, void (*f)())
+		void timer0(uint8_t prescaler, uint8_t ticks, void (*f)())
+		void timer1(uint8_t prescaler, uint16_t ticks, void (*f)())
+		void timer2(uint8_t prescaler, uint8_t ticks, void (*f)())
 
-- `prescaler` are predefined constants in the header file. For example:
+	- `prescaler` are predefined constants in the header file. For example:
 
-		TIMER0_PRESCALER_8
-		TIMER0_PRESCALER_64
-		...
-
-- `ticks` are the number of steps the timer will count. Current limits are:
-
-		timer0: 0 - 16777215
-		timer1: 0 - 4294967295
-		timer2: 0 - 16777215
-	
-- `f` is the function to execute after all ticks are consumed. Must be declared `void`
-with no parameters:
-	
-		void sample() {
+			TIMER0_PRESCALER_8
+			TIMER0_PRESCALER_64
 			...
-		}
+
+	- `ticks` are the number of steps the timer will count. Current limits are:
+
+		timer0: 0 - 255
+		timer1: 0 - 65535
+		timer2: 0 - 255
 	
+	- `f` is the function to execute after all ticks are consumed. Must be declared `void`
+	with no parameters:
+		
+			void sample() {
+				...
+			}
+
+- Other way is implementing the traditional `delay` routine. The function will `wait` until
+the count is done.
+
+		void wait0(uint8_t prescaler, uint8_t ticks)
+		void wait1(uint8_t prescaler, uint16_t ticks)
+		void wait2(uint8_t prescaler, uint8_t ticks)
+
+	- `prescaler` are predefined constants in the header file. For example:
+
+			TIMER0_PRESCALER_8
+			TIMER0_PRESCALER_64
+			...
+
+	- `ticks` are the number of steps the timer will count. Current limits are:
+
+		timer0: 0 - 255
+		timer1: 0 - 65535
+		timer2: 0 - 255
+
 ## Usage
 
 You need to know your CPU clock frequency before setting the timers.
@@ -48,9 +66,9 @@ You need to know your CPU clock frequency before setting the timers.
 	
 		20000 us / 4 us = 5000 ticks
 
-4. Call the function:
+4. Use timer1, as timer0 and timer2 can't support more than 256 ticks:
 	
-		timer0(TIMER0_PRESCALER_64, 5000UL, toggle_bits);
+		timer1(TIMER0_PRESCALER_64, 5000U, do_something);
 
 5. Enable global interrupts:
 	
@@ -58,31 +76,59 @@ You need to know your CPU clock frequency before setting the timers.
 	
 ## Sample Code
 
-	#include <avr/io.h>
-	#include "atmega-timers.h"
+- Using `wait*` functions:
 
-	// toggle PORTB status
-	void toggle() {
-		static uint8_t output = 0xff;
+		#include <avr/io.h>
+		#include "atmega-timers.h"
 
-		PORTB = output;
-		output = !output;
-	}
+		// toggle PORTB status
+		void toggle() {
+			static uint8_t output = 0xff;
 
-	void main() {
-		// set all pins of PORTB as output
-		DDRB = 0xff;
-		
-		// toggle PORTB each 500ms (using 16Mhz clock)
-		timer0(TIMER0_PRESCALER_64, 125000UL, toggle);
-		
-		// enable global interrupts
-		sei();
-
-		while(1) {
-			// do nothing
+			PORTB = output;
+			output = !output;
 		}
-	}
+
+		void main() {
+			// set all pins of PORTB as output
+			DDRB = 0xff;
+			
+			// toggle PORTB every 500ms
+			while(1) {
+				toggle();
+				wait1(TIMER1_PRESCALER_1024, 7812U);
+			}
+		}
+
+- Using `timer*` functions:
+
+		#include <avr/io.h>
+		#include "atmega-timers.h"
+
+		// toggle PORTB status
+		void toggle() {
+			static uint8_t output = 0xff;
+
+			PORTB = output;
+			output = !output;
+		}
+
+		void main() {
+			// set all pins of PORTB as output
+			DDRB = 0xff;
+			
+			// toggle PORTB every 500ms (using 16Mhz clock)
+			timer1(TIMER1_PRESCALER_1024, 7812U, toggle);
+			
+			// enable global interrupts
+			sei();
+
+			while(1) {
+				// do nothing
+			}
+		}
+
+Both examples have the same result.
 
 ## Running it in Arduino
 

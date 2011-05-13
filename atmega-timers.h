@@ -48,9 +48,13 @@
 #define TIMER2_PRESCALER_256 6
 #define TIMER2_PRESCALER_1024 7
 
-void timer0(uint8_t prescaler, uint32_t ticks, void (*f)());
-void timer1(uint8_t prescaler, uint32_t ticks, void (*f)());
-void timer2(uint8_t prescaler, uint32_t ticks, void (*f)());
+void timer0(uint8_t prescaler, uint8_t ticks, void (*f)());
+void timer1(uint8_t prescaler, uint16_t ticks, void (*f)());
+void timer2(uint8_t prescaler, uint8_t ticks, void (*f)());
+
+void wait0(uint8_t prescaler, uint8_t ticks);
+void wait1(uint8_t prescaler, uint16_t ticks);
+void wait2(uint8_t prescaler, uint8_t ticks);
 
 #endif
 
