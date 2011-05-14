@@ -31,6 +31,14 @@ This library contains several functions to use the timers in different ways.
 				...
 			}
 
+	- You can disable interrupt definition in the header file by commenting one of those `#define`:
+	
+			#define ENABLE_TIMER0
+			#define ENABLE_TIMER1
+			#define ENABLE_TIMER2
+			
+		This way, you can define your own interrupt handlers on your code without conflicts.
+		
 - Other way is implementing the traditional `delay` routine. The function will `wait` until
 the count is done.
 
