@@ -25,6 +25,11 @@
 #include <stdint.h>
 #include <avr/interrupt.h>
 
+// comment lines to disable interrupt definition for that timer
+#define ENABLE_TIMER0
+#define ENABLE_TIMER1
+#define ENABLE_TIMER2
+
 #define TIMER0_PRESCALER_NONE 0
 #define TIMER0_PRESCALER_1 1
 #define TIMER0_PRESCALER_8 2

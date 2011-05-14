@@ -35,11 +35,13 @@ void timer0(uint8_t prescaler, uint8_t ticks, void (*f)()) {
 	TIMSK0 = 2;
 }
 
+#ifdef ENABLE_TIMER0
 ISR(TIMER0_COMPA_vect) {
 	TIMSK0 = 0;
 	_t0_func();
 	TIMSK0 = 2;
 }
+#endif
 
 void timer1(uint8_t prescaler, uint16_t ticks, void (*f)()) {
 	TIMSK1 = 0;
@@ -51,11 +53,13 @@ void timer1(uint8_t prescaler, uint16_t ticks, void (*f)()) {
 	TIMSK1 = 2;
 }
 
+#ifdef ENABLE_TIMER1
 ISR(TIMER1_COMPA_vect) {
 	TIMSK1 = 0;
 	_t1_func();
 	TIMSK1 = 2;
 }
+#endif
 
 void timer2(uint8_t prescaler, uint8_t ticks, void (*f)()) {
 	TIMSK2 = 0;
@@ -68,13 +72,17 @@ void timer2(uint8_t prescaler, uint8_t ticks, void (*f)()) {
 	TIMSK2 = 2;
 }
 
+#ifdef ENABLE_TIMER2
 ISR(TIMER2_COMPA_vect) {
 	TIMSK2 = 0;
 	_t2_func();
 	TIMSK2 = 2;
 }
+#endif
 
 void wait0(uint8_t prescaler, uint8_t ticks) {
+	if (ticks == 0)
+		return;
 	TIMSK0 = 0;
 	OCR0A = ticks;
 	TCCR0A = 2;
@@ -85,6 +93,8 @@ void wait0(uint8_t prescaler, uint8_t ticks) {
 }
 
 void wait1(uint8_t prescaler, uint16_t ticks) {
+	if (ticks == 0)
+		return;
 	TIMSK1 = 0;
 	OCR1A = ticks;
 	TCCR1A = 0;
@@ -95,6 +105,8 @@ void wait1(uint8_t prescaler, uint16_t ticks) {
 }
 
 void wait2(uint8_t prescaler, uint8_t ticks) {
+	if (ticks == 0)
+		return;
 	TIMSK2 = 0;
 	ASSR = 0;
 	OCR2A = ticks;
