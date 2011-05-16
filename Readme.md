@@ -143,7 +143,7 @@ Both examples have the same result.
 Just rename `atmega-timers.c` to `atmega-timers.cpp` and install it as a normal library.
 
 Arduino already uses Timer0 for its internal code, so remember to disable it by commenting or
-deleting this line:
+deleting this line in `atmega-timers.h`:
 
 	#define ENABLE_TIMER0
 	
