@@ -142,6 +142,13 @@ Both examples have the same result.
 
 Just rename `atmega-timers.c` to `atmega-timers.cpp` and install it as a normal library.
 
+Arduino already uses Timer0 for its internal code, so remember to disable it by commenting or
+deleting this line:
+
+	#define ENABLE_TIMER0
+	
+or you will have errors at compile time. You still be able to use timer1, timer2, wait1 and wait2 functions.
+
 ## Atmel Model Support
 
 It should work with a long range of devices, for example:
