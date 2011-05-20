@@ -12,6 +12,10 @@ This library contains several functions to use the timers in different ways.
 		void timer1(uint8_t prescaler, uint16_t ticks, void (*f)())
 		void timer2(uint8_t prescaler, uint8_t ticks, void (*f)())
 
+		void timer0_stop()
+		void timer1_stop()
+		void timer2_stop()
+
 	- `prescaler` are predefined constants in the header file. For example:
 
 			TIMER0_PRESCALER_8
@@ -31,6 +35,8 @@ This library contains several functions to use the timers in different ways.
 				...
 			}
 
+	- `timerX_stop()` disables that timer by setting prescaler to "none". Energy saving feature.
+	
 	- You can disable interrupt definition in the header file by commenting one of those `#define`:
 	
 			#define ENABLE_TIMER0
