@@ -26,93 +26,102 @@ void (*_t1_func)();
 void (*_t2_func)();
 
 void timer0(uint8_t prescaler, uint8_t ticks, void (*f)()) {
-	TIMSK0 = 0;
-	_t0_func = f;
-	OCR0A = ticks;
-	TCCR0A = 2;
-	TCCR0B = prescaler;
-	TCNT0 = 0;
-	TIMSK0 = 2;
+	TIMSK0 &= ~(1<<OCIE0A);				// disable interrupt
+	_t0_func = f;						// assign user function
+	OCR0A = ticks;						// set top value
+	TCCR0A = (1<<WGM01);				// set CTC mode
+	TCCR0B = prescaler;					// set prescaler
+	TCNT0 = 0;							// reset TCNT counter register
+	TIMSK0 |= (1<<OCIE0A);				// enable interrupt
+}
+
+void timer0_stop() {
+	TCCR0B = 0;							// set prescaler to none, disabling timer
 }
 
 #ifdef ENABLE_TIMER0
 ISR(TIMER0_COMPA_vect) {
-	TIMSK0 = 0;
 	_t0_func();
-	TIMSK0 = 2;
 }
 #endif
 
 void timer1(uint8_t prescaler, uint16_t ticks, void (*f)()) {
-	TIMSK1 = 0;
+	TIMSK1 &= ~(1<<OCIE1A);
 	_t1_func = f;
 	OCR1A = ticks;
 	TCCR1A = 0;
 	TCCR1B = prescaler | (1<<WGM12);
 	TCNT1 = 0;
-	TIMSK1 = 2;
+	TIMSK1 |= (1<<OCIE1A);
+}
+
+void timer1_stop() {
+	TCCR1B = 0;
 }
 
 #ifdef ENABLE_TIMER1
 ISR(TIMER1_COMPA_vect) {
-	TIMSK1 = 0;
 	_t1_func();
-	TIMSK1 = 2;
 }
 #endif
 
 void timer2(uint8_t prescaler, uint8_t ticks, void (*f)()) {
-	TIMSK2 = 0;
+	TIMSK2 &= ~(1<<OCIE2A);
 	_t2_func = f;
 	OCR2A = ticks;
 	ASSR = 0;
-	TCCR2A = 2;
+	TCCR2A = (1<<WGM21);
 	TCCR2B = prescaler;
 	TCNT2 = 0;
-	TIMSK2 = 2;
+	TIMSK2 |= (1<<OCIE2A);
+}
+
+void timer2_stop() {
+	TCCR2B = 0;
 }
 
 #ifdef ENABLE_TIMER2
 ISR(TIMER2_COMPA_vect) {
-	TIMSK2 = 0;
 	_t2_func();
-	TIMSK2 = 2;
 }
 #endif
 
 void wait0(uint8_t prescaler, uint8_t ticks) {
 	if (ticks == 0)
-		return;
-	TIMSK0 = 0;
-	OCR0A = ticks;
-	TCCR0A = 2;
-	TCCR0B = prescaler;
-	TCNT0 = 0;
-	TIFR0 = 2;
-	while(!(TIFR0 & 2));
+		return;						// return if no ticks to count
+	TIMSK0 &= ~(1<<OCIE0A);			// disable compare interrupt
+	OCR0A = ticks;					// set top value
+	TCCR0A = (1<<WGM01);			// set CTC mode
+	TCCR0B = prescaler;				// set prescaler
+	TCNT0 = 0;						// reset TCNT counter register
+	TIFR0 |= (1<<OCF0A);			// reset compare flag
+	while(!(TIFR0 & (1<<OCF0A)));	// wait till compare flag goes up
+	TCCR0B = 0;						// stop timer to save energy
 }
 
 void wait1(uint8_t prescaler, uint16_t ticks) {
 	if (ticks == 0)
 		return;
-	TIMSK1 = 0;
+	TIMSK1 &= ~(1<<OCIE1A);
 	OCR1A = ticks;
 	TCCR1A = 0;
 	TCCR1B = prescaler | (1<<WGM12);
 	TCNT1 = 0;
-	TIFR1 = 2;
-	while(!(TIFR1 & 2));
+	TIFR1 |= (1<<OCF1A);
+	while(!(TIFR1 & (1<<OCF1A)));
+	TCCR1B = 0;
 }
 
 void wait2(uint8_t prescaler, uint8_t ticks) {
 	if (ticks == 0)
 		return;
-	TIMSK2 = 0;
+	TIMSK2 &= ~(1<<OCIE2A);
 	ASSR = 0;
 	OCR2A = ticks;
-	TCCR2A = 2;
+	TCCR2A = (1<<WGM21);
 	TCCR2B = prescaler;
 	TCNT2 = 0;
-	TIFR2 = 2;
-	while(!(TIFR2 & 2));
+	TIFR2 |= (1<<OCF2A);
+	while(!(TIFR2 & (1<<OCF2A)));
+	TCCR2B = 0;
 }

@@ -25,7 +25,8 @@
 #include <stdint.h>
 #include <avr/interrupt.h>
 
-// comment lines to disable interrupt definition for that timer
+// Comment/delete those lines to disable interrupt definition for that timer
+// so you can define your own ISR functions without conflicts.
 #define ENABLE_TIMER0
 #define ENABLE_TIMER1
 #define ENABLE_TIMER2
@@ -56,10 +57,12 @@
 void timer0(uint8_t prescaler, uint8_t ticks, void (*f)());
 void timer1(uint8_t prescaler, uint16_t ticks, void (*f)());
 void timer2(uint8_t prescaler, uint8_t ticks, void (*f)());
+void timer0_stop();
+void timer1_stop();
+void timer2_stop();
 
 void wait0(uint8_t prescaler, uint8_t ticks);
 void wait1(uint8_t prescaler, uint16_t ticks);
 void wait2(uint8_t prescaler, uint8_t ticks);
 
 #endif
-
