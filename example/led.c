@@ -20,6 +20,6 @@ void main() {
 	sei();
 
 	while(1) {
-		// do nothing
+		// your code goes here
 	}
 }

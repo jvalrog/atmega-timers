@@ -37,15 +37,14 @@ This library contains several functions to use the timers in different ways.
 
 	- `timerX_stop()` disables that timer by setting prescaler to "none". Energy saving feature.
 	
-	- You can disable interrupt definition in the header file by commenting one of those `#define`:
+	- You can disable interrupt definition if you want to use that timer for your own
+	purposes. Just comment or delete one of those lines inside `atmega-timers.h` file:
 	
 			#define ENABLE_TIMER0
 			#define ENABLE_TIMER1
 			#define ENABLE_TIMER2
-			
-		This way, you can define your own interrupt handlers on your code without conflicts.
 		
-- Other way is implementing the traditional `delay` routine. The function will `wait` until
+- Other way is implementing the traditional `delay` routine. The function will `block-wait` until
 the count is done.
 
 		void wait0(uint8_t prescaler, uint8_t ticks)
@@ -82,7 +81,7 @@ You need to know your CPU clock frequency before setting the timers.
 
 4. Use timer1, as timer0 and timer2 can't support more than 256 ticks:
 	
-		timer1(TIMER0_PRESCALER_64, 5000U, do_something);
+		timer1(TIMER1_PRESCALER_64, 5000U, do_something);
 
 5. Enable global interrupts:
 	
@@ -138,7 +137,7 @@ You need to know your CPU clock frequency before setting the timers.
 			sei();
 
 			while(1) {
-				// do nothing
+				// your code goes here
 			}
 		}
 
@@ -152,7 +151,7 @@ Arduino already uses Timer0 for its internal code, so remember to disable it by 
 deleting this line in `atmega-timers.h`:
 
 	#define ENABLE_TIMER0
-	
+
 or you will have errors at compile time. You still be able to use timer1, timer2, wait1 and wait2 functions.
 
 ## Atmel Model Support
