@@ -145,14 +145,9 @@ Both examples have the same result.
 
 ## Running it in Arduino
 
-Just rename `atmega-timers.c` to `atmega-timers.cpp` and install it as a normal library.
-
-Arduino already uses Timer0 for its internal code, so remember to disable it by commenting or
-deleting this line in `atmega-timers.h`:
-
-	#define ENABLE_TIMER0
-
-or you will have errors at compile time. You still be able to use timer1, timer2, wait1 and wait2 functions.
+1. Download the source code by using the Download Button on this page
+2. Rename and install the library as: `{arduino_path}/libraries/AtmegaTimers`
+3. Open Arduino and go to "Import Library" option. Choose AtmegaTimers from menu.
 
 ## Atmel Model Support
 
