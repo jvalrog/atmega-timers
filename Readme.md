@@ -157,4 +157,5 @@ It should work with a long range of devices, for example:
 - atmega164, 324, 644, 1284
 - atmega640, 1280, 1281, 2560, 2561
 - atmega325, 645
+- attiny2313/4313 (you must disable timer2 as it's not supported)
 - ...
