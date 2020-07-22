@@ -64,8 +64,9 @@ void timer1(uint8_t prescaler, uint16_t ticks, void (*f)()) {
 	TCCR1B = prescaler | _BV(WGM12);
 	TCNT1 = 0;
 #if defined(__AVR_ATtiny2313__) || defined(__AVR_ATtiny4313__)
-#else
 	TIMSK |= _BV(OCIE1A);
+#else
+	TIMSK1 |= _BV(OCIE1A);
 #endif
 }
 
